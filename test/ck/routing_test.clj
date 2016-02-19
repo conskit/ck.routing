@@ -27,7 +27,7 @@
   (action
     ^{:route "/hello/world"}
     my-action
-    [req data]
+    [req]
     {:hello "world" :req req}))
 
 (defprotocol ResultService
@@ -52,4 +52,4 @@
   (let [serv (app/get-service app :ResultService)
         [route action] (first (get-result serv))]
     (fact route => "/hello/world")
-    (fact (ckp/invoke action {:foo "bar"} {}) => {:hello "world" :req {:foo "bar"}})))
+    (fact (ckp/invoke action {:foo "bar"}) => {:hello "world" :req {:foo "bar"}})))
