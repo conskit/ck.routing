@@ -1,6 +1,8 @@
 (ns ck.routing
-  (:require [puppetlabs.trapperkeeper.core :refer [defservice]]
-            [puppetlabs.trapperkeeper.services :refer [service-context]]))
+  (:require
+    [clojure.tools.logging :as log]
+    [puppetlabs.trapperkeeper.core :refer [defservice]]
+    [puppetlabs.trapperkeeper.services :refer [service-context]]))
 
 (defprotocol CKRouter
   "Router functions"

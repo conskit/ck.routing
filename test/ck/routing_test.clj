@@ -1,7 +1,5 @@
 (ns ck.routing-test
-  (:require [clojure.test :refer :all]
-            [ck.routing :refer :all]))
+  (:require [ck.routing :refer :all])
+  (:use midje.sweet))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(fact (+ 1 1) => 2)
