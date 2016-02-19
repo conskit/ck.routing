@@ -4,7 +4,7 @@
     [puppetlabs.trapperkeeper.core :refer [defservice]]
     [puppetlabs.trapperkeeper.services :refer [service-context]]
     [puppetlabs.trapperkeeper.testutils.bootstrap :refer [with-app-with-cli-data]]
-    [ck.routing :refer [make-ring-handler*]]
+    [ck.routing :refer [make-ring-handler* router]]
     [conskit.core :as ck]
     [conskit.protocols :as ckp]
     [conskit.macros :refer :all])
