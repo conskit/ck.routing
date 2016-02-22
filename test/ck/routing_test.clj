@@ -10,15 +10,15 @@
     [conskit.macros :refer :all])
   (:use midje.sweet))
 
-(defn maker-fn
-  [routes get-action-fn]
+(defmethod make-ring-handler* :test
+  [{:keys [routes get-action]}]
   (for [r routes
         :let [{:keys [id route]} r]]
-    [route (get-action-fn id)]))
+    [route (get-action id)]))
 
-(fact (make-ring-handler* [{:id :my-action :route "/foo/bar"}]
-                          maker-fn
-                          #(identity %)) => [["/foo/bar" :my-action]])
+(fact (make-ring-handler* {:provider :test
+                           :routes   [{:id :my-action :route "/foo/bar"}]
+                           :get-action #(identity %)}) => [["/foo/bar" :my-action]])
 
 
 (defcontroller
@@ -41,7 +41,7 @@
         (register-controllers! [my-controller])
         context)
   (start [this context]
-         {:result (make-ring-handler maker-fn)})
+         {:result (make-ring-handler :test)})
   (get-result [this]
               (:result (service-context this))))
 

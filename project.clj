@@ -9,4 +9,7 @@
                    :dependencies [[puppetlabs/trapperkeeper "1.3.0" :classifier "test"]
                                   [puppetlabs/kitchensink "1.3.0" :classifier "test" :scope "test"]
                                   [midje "1.8.3"]]
-                   :plugins [[lein-midje "3.2"]]}})
+                   :plugins [[lein-midje "3.2"]]}
+             :bidi-routing {:source-paths ["bidi"]
+                            :dependencies [[bidi "1.25.1"]]}}
+  :classifiers {:bidi :bidi-routing})
