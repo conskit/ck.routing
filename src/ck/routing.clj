@@ -16,7 +16,8 @@
   (start [this context]
          (log/info "Starting Router")
          (-> context
-             (assoc :routes (filter #(not-empty %) (select-meta-keys [:route :id])))))
+             (assoc :routes (filter #(not (nil? (:route %)))
+                                    (select-meta-keys [:route :id])))))
   (make-ring-handler [this provider]
                      (make-ring-handler* (merge {:provider   provider
                                                  :get-action get-action}

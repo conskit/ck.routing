@@ -6,8 +6,8 @@
     [puppetlabs.trapperkeeper.testutils.bootstrap :refer [with-app-with-cli-data]]
     [ck.routing :refer [make-ring-handler* router]]
     [conskit.core :as ck]
-    [conskit.protocols :as ckp]
-    [conskit.macros :refer :all])
+    [conskit.macros :refer :all]
+    [ck.routing.bidi])
   (:use midje.sweet))
 
 (defmethod make-ring-handler* :test
@@ -25,10 +25,27 @@
   my-controller
   []
   (action
-    ^{:route "/hello/world"}
+    ^{:route ["/hello/world/" [#".*" :id]]}
     my-action
     [req]
-    {:hello "world" :req req}))
+    {:hello "world" :req req})
+  (action
+    ^{:route #".*?\/foo.*"}
+    route-action
+    [req]
+    {:hello "world" :req req})
+  (action
+    ^{:route {:request-method :get
+              :ck-route ["/article/" :id ]}}
+    get-complex-route-action
+    [req]
+    {:hello "world" :req req})
+  (action
+    ^{:route {:request-method :post
+              :ck-route ["/article/" :id ]}}
+    post-complex-route-action
+    [req]
+    {:hello "world"}))
 
 (defprotocol ResultService
   (get-result [this]))
@@ -41,7 +58,7 @@
         (register-controllers! [my-controller])
         context)
   (start [this context]
-         {:result (make-ring-handler :test)})
+         {:result (make-ring-handler :bidi)})
   (get-result [this]
               (:result (service-context this))))
 
@@ -50,6 +67,10 @@
   [ck/registry router test-service]
   {:config "./dev-resources/test-config.conf"}
   (let [serv (app/get-service app :ResultService)
-        [route action] (first (get-result serv))]
-    (fact route => "/hello/world")
-    (fact (ckp/invoke action {:foo "bar"}) => {:hello "world" :req {:foo "bar"}})))
+        handler (get-result serv)]
+    (fact (handler {:uri "/article/1" :request-method :get}) =>
+          {:hello "world", :req {:uri "/article/1", :request-method :get, :params {:id "1"}, :route-params {:id "1"}}})
+    (fact (handler {:uri "/hello/world/26/37"}) =>
+          {:hello "world", :req {:params {:id "26/37"}, :route-params {:id "26/37"}, :uri "/hello/world/26/37"}})
+    (fact (handler {:uri "/foo/bar/baz/qux/quux/corge/grault/garply"}) =>
+          {:hello "world", :req {:params nil, :route-params nil, :uri "/foo/bar/baz/qux/quux/corge/grault/garply"}})))
