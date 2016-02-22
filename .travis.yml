@@ -5,7 +5,7 @@ jdk:
 
 language: clojure
 lein: lein2
-script: lein2 with-profile dev trampoline midje
+script: lein2 with-profile dev,bidi-routing trampoline midje
 
 addons:
   # Fix OpenJDK builds
