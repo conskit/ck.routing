@@ -1,4 +1,4 @@
-# ck.routing [![Build Status](https://travis-ci.org/conskit/ck.routing.svg?branch=master)](https://travis-ci.org/conskit/ck.routing) [![Dependencies Status](https://jarkeeper.com/conskit/ck.routing/status.svg)](https://jarkeeper.com/conskit/ck.routing)
+# ck.routing [![Build Status](https://travis-ci.org/conskit/ck.routing.svg?branch=master)](https://travis-ci.org/conskit/ck.routing) [![Dependencies Status](https://jarkeeper.com/conskit/ck.routing/status.svg)](https://jarkeeper.com/conskit/ck.routing) [![Clojars Project](https://img.shields.io/clojars/v/ck.routing.svg)](https://clojars.org/ck.routing)
 
 Routing module for [conskit](https://github.com/conskit/conskit)
 
