@@ -35,6 +35,11 @@
     [req]
     {:hello "world" :req req})
   (action
+    ^{:route true}
+    catch-all-action
+    [req]
+    {:hello "not found"})
+  (action
     ^{:route {:request-method :get
               :ck-route ["/article/" :id ]}}
     get-complex-route-action
@@ -53,7 +58,7 @@
 (defservice
   test-service ResultService
   [[:ActionRegistry register-controllers!]
-   [:CKRouter make-ring-handler]]
+   [:CKRouter make-ring-handler get-routes]]
   (init [this context]
         (register-controllers! [my-controller])
         context)
@@ -68,6 +73,8 @@
   {:config "./dev-resources/test-config.conf"}
   (let [serv (app/get-service app :ResultService)
         handler (get-result serv)]
+    (fact (handler {:uri "/idontknow"}) =>
+          {:hello "not found"})
     (fact (handler {:uri "/article/1" :request-method :get}) =>
           {:hello "world", :req {:uri "/article/1", :request-method :get, :params {:id "1"}, :route-params {:id "1"}}})
     (fact (handler {:uri "/hello/world/26/37"}) =>

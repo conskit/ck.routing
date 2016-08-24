@@ -8,7 +8,8 @@
 
 (defprotocol CKRouter
   "Router functions"
-  (make-ring-handler [this provider]))
+  (make-ring-handler [this provider])
+  (get-routes [this]))
 
 (defservice
   router CKRouter
@@ -21,4 +22,6 @@
   (make-ring-handler [this provider]
                      (make-ring-handler* (merge {:provider   provider
                                                  :get-action get-action}
-                                                (service-context this)))))
+                                                (service-context this))))
+  (get-routes [this]
+              (:routes (service-context this))))
